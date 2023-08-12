@@ -3511,3 +3511,12 @@ details-disclosure > details {
     --border-offset: 0px; /* Prevent the border from growing on buttons when this effect is on. */
   }
 }
+
+/* カートに追加するボタンのカラーの変更 */
+.button--secondary {
+  background-color: #008000;
+}
+
+.button--secondary:hover {
+  background-color: #0000ff;
+}
