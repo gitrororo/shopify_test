@@ -104,6 +104,17 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
+          {% comment %}在庫の情報を表示{% endcomment %}
+          <div id="stock-info">
+            {% assign stock_quantity = product.selected_or_first_available_variant.inventory_quantity %}
+            {% if stock_quantity <= 0 %}
+              <p>Out of Stock</p>
+            {% elsif stock_quantity < 5 %}
+              <p>Low stock</p>
+            {% else %}
+              <p>Available!</p>
+            {% endif %}
+          </div>
         </div>
       {%- endform -%}
     </product-form>
@@ -154,3 +165,32 @@
     <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 </div>
+
+{% comment %}在庫の情報を表示するjs{% endcomment %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const variantRadios = document.querySelectorAll('input[name="サイズ"]');
+    const stockInfoDiv = document.getElementById('stock-info');
+    const variantStocks = {
+      {% for variant in product.variants %}
+        "{{ variant.title }}": {{ variant.inventory_quantity }},
+      {% endfor %}
+    };
+    variantRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        const selectedVariant = radio.value;
+        updateStockInfo(variantStocks[selectedVariant]);
+      });
+    });
+
+    function updateStockInfo(stock_quantity) {
+        if (stock_quantity <= 0) {
+            stockInfoDiv.innerHTML = '<p>Out of Stock</p>';
+        } else if (stock_quantity < 5) {
+            stockInfoDiv.innerHTML = '<p>Low Stock</p>';
+        } else {
+            stockInfoDiv.innerHTML = '<p>Available!</p>';
+        }
+    }
+});
+</script>
