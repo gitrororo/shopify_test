@@ -125,3 +125,21 @@
     </div>
   </div>
 </noscript>
+{% comment %}バリエーションの情報を表示するjs{% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const variantRadios = document.querySelectorAll('input[name="サイズ"]');
+    const variantInfo = document.getElementById('product-variant-info');
+    const variantMetafields = {
+      {% for variant in product.variants %}
+        "{{ variant.title }}": "{{ variant.metafields.custom._size-label }}",
+      {% endfor %}
+    };
+    variantRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        const selectedVariant = radio.value;
+        variantInfo.textContent = variantMetafields[selectedVariant];
+      });
+    });
+  });
+</script>
