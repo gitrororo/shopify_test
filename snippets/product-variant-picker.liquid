@@ -30,6 +30,11 @@
       <script type="application/json">
         {{ product.variants | json }}
       </script>
+      {% comment %}バリエーションの情報を表示{% endcomment %}
+      {% assign selected_variant = product.selected_or_first_available_variant %}
+      <div class="product-form" id="product-variant-info">
+        {{ selected_variant.metafields.custom._size-label }}
+      </div>
     </variant-radios>
   {%- else -%}
     <variant-selects
