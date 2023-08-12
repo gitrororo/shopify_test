@@ -104,6 +104,17 @@
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}
+          {% comment %}在庫の情報を表示{% endcomment %}
+          <div id="stock-info">
+            {% assign stock_quantity = product.selected_or_first_available_variant.inventory_quantity %}
+            {% if stock_quantity <= 0 %}
+              <p>Out of Stock</p>
+            {% elsif stock_quantity < 5 %}
+              <p>Low stock</p>
+            {% else %}
+              <p>Available!</p>
+            {% endif %}
+          </div>
         </div>
       {%- endform -%}
     </product-form>
